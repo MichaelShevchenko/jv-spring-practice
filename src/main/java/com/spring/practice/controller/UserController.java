@@ -3,8 +3,8 @@ package com.spring.practice.controller;
 import com.spring.practice.dto.UserResponseDto;
 import com.spring.practice.model.User;
 import com.spring.practice.service.UserService;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,19 +32,17 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserResponseDto get(@PathVariable Long userId) {
-        return castUserToDto(userService.getById(userId));
+        return convertUserToDto(userService.getById(userId));
     }
 
     @GetMapping
     public List<UserResponseDto> getAll() {
-        List<UserResponseDto> result = new ArrayList<>();
-        for (User user : userService.listUsers()) {
-            result.add(castUserToDto(user));
-        }
-        return result;
+        return userService.listUsers().stream()
+                .map(this::convertUserToDto)
+                .collect(Collectors.toList());
     }
 
-    private UserResponseDto castUserToDto(User user) {
+    private UserResponseDto convertUserToDto(User user) {
         UserResponseDto userDto = new UserResponseDto();
         userDto.setId(user.getId());
         userDto.setFirstName(user.getFirstName());
