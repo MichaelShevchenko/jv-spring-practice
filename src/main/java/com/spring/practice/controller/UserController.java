@@ -21,7 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/inject-data")
+    @GetMapping("/inject")
     public String injectData() {
         userService.add(new User("Richard", "Feynman", "physics.rules@gmail.com"));
         userService.add(new User("Hell", "Jordan", "lantern.guardian@nova.com"));
